@@ -11,6 +11,9 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// ('このURLのとき’、’コトローラー＠メソッド’)
+Route::get('/','DiaryController@index')->name('diary.index');
+Route::get('/diary/create','DiaryController@create')->name('diary.create');
+// Route::post('/diary/store','DiaryController@store')->('好きな名前');
+Route::post('/diary/store', 'DiaryController@store')->name('diary.store');
+// php artisan serve
