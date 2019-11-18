@@ -1,5 +1,5 @@
 <!-- layout.blade.php を読み込む -->
-@extends('layout')
+@extends('layouts.app')
 
 @section('title','一覧')
 
