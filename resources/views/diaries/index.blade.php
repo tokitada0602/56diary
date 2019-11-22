@@ -13,16 +13,33 @@
       <p>{{$diary->title}}</p>
       <p>{{$diary->body}}</p>
       <p>{{$diary->created_at}}</p>
+{{-- Auth::check() :  ログインしていたらtrue,他はfalse --}}
+      @if (Auth::check() && $diary->user_id == Auth::user()->id)
+        <a href="{{ route('diary.edit',['id' => $diary->id]) }}" class="btn btn-success">編集</a>
 
-      <a href="{{ route('diary.edit',['id' => $diary->id]) }}" class="btn btn-success">編集</a>
+        <form action="{{ route('diary.destroy',['id' => $diary->id]) }}" method="POST" class="d-inline">
+        @csrf
+        @method('delete')
+          <button class="btn btn-danger">削除</button>
+        </form>
+      @endif
+      <div class="mt-3 ml-3">
+        @if (Auth::check() && $diary->likes->contains(function ($user) {
+         return $user->id === Auth::user()->id;
+        }))
+            {{-- ログインしている かつ この日記にいいねしている場合 --}}
+            <i class="fas fa-heart fa-lg text-danger js-dislike"></i>
+        @else
+            {{-- いいねしていない場合 --}}
+            <i class="far fa-heart fa-lg text-danger js-like"></i>
+        @endif
 
-      <form action="{{ route('diary.destroy',['id' => $diary->id]) }}" method="POST" class="d-inline">
-      @csrf
-      @method('delete')
-        <button class="btn btn-danger">削除</button>
-      </form>
 
-    </div>
+        <input type="hidden" class="diary-id" value="{{ $diary->id }}">
+
+      <span class="js-like-num">{{ $diary->likes->count() }}</span>
+      </div>
+     </div>
   @endforeach
 
   @endsection
